@@ -15,6 +15,7 @@ class UsersTable
     
     public function __construct(TableGateway $tableGateway)
     {
+        echo 'construct';
         $this->tableGateway = $tableGateway;
     }
     
