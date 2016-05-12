@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Users\Model;
+namespace ZendSkeletonModule\Model;
 use Zend\Db\TableGateway\TableGateway;
 
 class UsersTable
@@ -15,10 +15,14 @@ class UsersTable
     
     public function __construct(TableGateway $tableGateway)
     {
-        echo 'construct';
         $this->tableGateway = $tableGateway;
     }
     
+    public function fetchAll()
+    {
+        $resultSet = $this->tableGateway->select();
+        return $resultSet;
+    }
     public function getAll() {
 
         $sl = $this->getServiceLocator();
@@ -27,7 +31,7 @@ class UsersTable
         $results = $statement->execute();
         $row = $results->current();
         $name = $row['name'];
-        var_dump($row);
+        return $name;
     }
     
     public function getUser($id)
@@ -41,10 +45,14 @@ class UsersTable
         return $row;
     }
     
-    public function fetchAll()
-    {
-        $resultSet = $this->tableGateway->select();
-        return $resultSet;
+    public function saveUser($request)
+    {   
+        $data = array(
+            'name' => $request->getPost()->name,
+            'email' => $request->getPost()->email,
+            'password' => md5($request->getPost()->password),
+            'age' => $request->getPost()->age
+        );
+        $this->tableGateway->insert($data);
     }
-
 }

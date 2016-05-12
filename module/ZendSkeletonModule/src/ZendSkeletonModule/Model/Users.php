@@ -6,18 +6,19 @@
  * and open the template in the editor.
  */
 
- namespace Users\Model;
+ namespace ZendSkeletonModule\Model;
 
- class Users
- {
-     public $id;
-     public $name;
-     public $email;
+class Users
+{
+   public $id;
+   public $name;
+   public $email;
 
-     public function exchangeArray($data)
-     {
-         $this->id     = (!empty($data['id'])) ? $data['id'] : null;
-         $this->name = (!empty($data['name'])) ? $data['name'] : null;
-         $this->email  = (!empty($data['email'])) ? $data['email'] : null;
-     }
- }
+   public function exchangeArray($data)
+   {
+       $this->id     = (!empty($data['id'])) ? $data['id'] : null;
+       $this->name = (!empty($data['name'])) ? $data['name'] : null;
+       $this->email  = (!empty($data['email'])) ? $data['email'] : null;
+       $this->age  = (!empty($data['age'])) ? $data['age'] : null;
+   }
+}

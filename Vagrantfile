@@ -6,7 +6,9 @@ VAGRANTFILE_API_VERSION = '2'
 @script = <<SCRIPT
 DOCUMENT_ROOT_ZEND="/var/www/zf/public"
 apt-get update
-apt-get install -y apache2 git curl php5-cli php5 php5-intl libapache2-mod-php5
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password 123456'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password 123456'
+apt-get install -y apache2 git curl php5-cli php5 php5-intl libapache2-mod-php5 php5-mysql mysql-server
 echo "
 <VirtualHost *:80>
     ServerName skeleton-zf.local

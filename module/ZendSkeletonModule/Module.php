@@ -11,8 +11,11 @@ namespace ZendSkeletonModule;
 
 use ZendSkeletonModule\Model\Users;
 use ZendSkeletonModule\Model\UsersTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
@@ -44,4 +47,23 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
     }*/
+    
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'ZendSkeletonModule\Model\UsersTable' =>  function($sm) {
+                    $tableGateway = $sm->get('UsersTableGateway');
+                    $table = new UsersTable($tableGateway);
+                    return $table;
+                },
+                'UsersTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Users());
+                    return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
+                },
+            ),
+        );
+    }
 }
