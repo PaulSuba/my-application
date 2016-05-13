@@ -12,15 +12,32 @@ and open the template in the editor.
     <body>
         <?php
             echo ('Salutare! ' .$variable);
+            
+        $title = 'Formular de inregistrare:';
+        $this->headTitle($title);
         ?>
-        <div>Formular de inregistrare:</div>
-        <form action="world" method="post">
-            <div><input type="text" name="name" placeholder= "Name"></div>
-            <div><input type="text" name="age" placeholder="Age"></div>
-            <div><input type="email" name="email" placeholder="Email"></div>
-            <div><input type="password" name="password" placeholder="Password"></div>
-            <div><input type="submit" name="Submit" style="margin-top:10px;"></div>
-        </form>
+        <h3><?php echo $this->escapeHtml($title);?></h3>
+
+        <?php
+            //echo $this->form($form);
+            $form = $this->form;
+//            $form->setAttribute('action', $this->url(
+//                    'hello',
+//                    array(
+//                        'action' => 'world'
+//                    )
+//            ));
+            $form->prepare();
+            
+            echo $this->form()->openTag($form);
+            //echo $this->formHidden($form->get('id'));?>
+            <div><?php echo $this->formRow($form->get('name')); ?></div>
+            <div><?php echo $this->formRow($form->get('age'));?></div>
+            <div><?php echo $this->formRow($form->get('email'));?></div>
+            <div><?php echo $this->formRow($form->get('password'));?></div>
+            <?php echo $this->formSubmit($form->get('submit'));
+            echo $this->form()->closeTag();
+         ?>
         <?php 
             foreach($errors as $error)
             {

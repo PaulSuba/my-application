@@ -14,8 +14,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Input;
-use Zend\Validator;
-use Zend\Validator\ValidatorInterface;
+//use Zend\Validator;
+//use Zend\Validator\ValidatorInterface;
+//use Zend\Validator\Callback;
+use ZendSkeletonModule\Form\UsersForm;
 
 
 
@@ -25,6 +27,10 @@ class HelloController extends AbstractActionController
     
     public function worldAction()
     {
+
+          $form = new UsersForm();
+          $form->get('submit')->setValue('Register');
+          //return array('form' => $form);
 //        $validator = new Zend\Validator\StringLength(8);
 //
 //        $validator->setMessage(
@@ -51,6 +57,14 @@ class HelloController extends AbstractActionController
 //            // "The string 'word' is too short; it must be at least 8 characters"
 //        }
         if($this->getRequest()->isPost()){
+            
+            $valid = new Zend\Validator\Callback('myMethod');
+            if($valid->isValid($this->getRequest()->getPost()->name)){
+                echo 'input valid';
+            } else {
+                echo 'input invalid';
+            }
+            
             $email = new Input('email');
             $email->getValidatorChain()
                   ->attach(new Validator\EmailAddress());
@@ -82,6 +96,7 @@ class HelloController extends AbstractActionController
         
         $view1 = new ViewModel(array(
             'users' => $this->getUsersTable()->fetchAll(),
+            'form' => $form,
             //'check' => $this->getUsersTable()->getUser(1),
         ));
         $view1->setTemplate('zend-skeleton-module/hello/world');
@@ -96,5 +111,10 @@ class HelloController extends AbstractActionController
             $this->usersTable = $sm->get('ZendSkeletonModule\Model\UsersTable');
         }
         return $this->usersTable;
+    }
+    
+    public function myMethod($value)
+    {
+        return TRUE;
     }
 }
