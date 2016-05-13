@@ -67,6 +67,10 @@ class UsersForm extends Form
         ));
     }
     
-    
+//    public function isValid() {
+//        parent::isValid();
+//        
+//        return TRUE;
+//    } 
     
 }

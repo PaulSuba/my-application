@@ -17,6 +17,8 @@ class Users implements InputFilterAwareInterface
    public $id;
    public $name;
    public $email;
+   public $age;
+   protected $inputFilter;
 
    public function exchangeArray($data)
    {

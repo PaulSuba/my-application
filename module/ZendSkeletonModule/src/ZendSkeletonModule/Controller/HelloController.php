@@ -17,6 +17,7 @@ use Zend\InputFilter\Input;
 //use Zend\Validator;
 //use Zend\Validator\ValidatorInterface;
 //use Zend\Validator\Callback;
+use ZendSkeletonModule\Model\Users;
 use ZendSkeletonModule\Form\UsersForm;
 
 
@@ -28,8 +29,43 @@ class HelloController extends AbstractActionController
     public function worldAction()
     {
 
-          $form = new UsersForm();
-          $form->get('submit')->setValue('Register');
+        $form = new UsersForm();
+        $form->get('submit')->setValue('Register');
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $user = new Users();
+            $form->setInputFilter($user->getInputFilter());
+            $form->setData($request->getPost());
+
+            if ($form->isValid()){
+                die('here');
+                $user = exchangeArray($form->getData());
+                $this->getUsersTable()->saveUser($user);
+                
+                return $this->redirect()->toRoute('hello/world');
+        } else {
+            echo 'invalid';
+        }
+        die;
+            
+//            echo '<pre>';
+//            echo '<pre>'.$form->getMessages().'</pre>'; //error messages
+//            echo '<pre>'.$form->getErrors().'</pre>'; //error codes
+//            echo '<pre>'.$form->getErrorMessages().'</pre>'; //any custom error messages
+//            echo '</pre>';
+//            die();
+//            return;
+            
+//            if ($form->isValid()){
+//                die('here');
+//                $user = exchangeArray($form->getData());
+//                $this->getUsersTable()->saveUser($user);
+//                
+//                return $this->redirect()->toRoute('hello/world');
+//            }
+            
+        }
           //return array('form' => $form);
 //        $validator = new Zend\Validator\StringLength(8);
 //
@@ -57,13 +93,6 @@ class HelloController extends AbstractActionController
 //            // "The string 'word' is too short; it must be at least 8 characters"
 //        }
         if($this->getRequest()->isPost()){
-            
-            $valid = new Zend\Validator\Callback('myMethod');
-            if($valid->isValid($this->getRequest()->getPost()->name)){
-                echo 'input valid';
-            } else {
-                echo 'input invalid';
-            }
             
             $email = new Input('email');
             $email->getValidatorChain()
